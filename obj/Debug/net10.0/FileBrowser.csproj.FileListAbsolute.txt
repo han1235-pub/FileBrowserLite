@@ -1,0 +1,6 @@
+/Users/hanguyen/Downloads/TestProject/obj/Debug/net10.0/FileBrowser.GeneratedMSBuildEditorConfig.editorconfig
+/Users/hanguyen/Downloads/TestProject/obj/Debug/net10.0/FileBrowser.AssemblyInfoInputs.cache
+/Users/hanguyen/Downloads/TestProject/obj/Debug/net10.0/FileBrowser.AssemblyInfo.cs
+/Users/hanguyen/Downloads/TestProject/obj/Debug/net10.0/FileBrowser.csproj.CoreCompileInputs.cache
+/Users/hanguyen/Downloads/TestProject/obj/Debug/net10.0/rpswa.dswa.cache.json
+/Users/hanguyen/Downloads/TestProject/obj/Debug/net10.0/FileBrowser.MvcApplicationPartsAssemblyInfo.cache
