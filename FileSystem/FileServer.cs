@@ -27,6 +27,7 @@ using System.Runtime.CompilerServices;
                 throw new UnauthorizedAccessException();
             }
 
+            //Console.WriteLine($"Requested full path: {fullPath}");
             return fullPath;
         }
 
@@ -41,7 +42,7 @@ using System.Runtime.CompilerServices;
         {
             // string folder = CreateFolder(dest, file.FileName);
             // string destination = Path.Combine(folder, Path.GetFileName(file.FileName));
-            using var stream = new FileStream(Path.Combine(dest, Path.GetFileName(file.FileName)), FileMode.Create);
+            using var stream = new FileStream(GetCurrPath(Path.Combine(dest, Path.GetFileName(file.FileName))), FileMode.Create);
             file.CopyTo(stream);
         }
 
@@ -57,13 +58,7 @@ using System.Runtime.CompilerServices;
 
         public BrowserResponse Browse(string path)
         {
-            // Console.WriteLine("Backend starts browsing");
-
             string actualPath = GetCurrPath(path);
-            // Console.WriteLine($"Accessing: {actualPath}");
-            // Console.WriteLine($"Relative: {path}");
-            // Console.WriteLine($"Exists: {Directory.Exists(actualPath)}");
-
 
             if (!Directory.Exists(actualPath))
             {

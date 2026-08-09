@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("DOM Loaded");
+
+    setUploadButton();
+    setCreateFolderButton();
     loadView();
+
     window.addEventListener("popstate",loadView);
 })
 
@@ -13,8 +17,8 @@ async function loadView() {
     const path = params.get("path") || "";
     const searchTerm = params.get("search") || "";
 
-    setUploadButton(path);
-    setCreateFolderButton(path);
+    // setUploadButton(path);
+    // setCreateFolderButton(path);
 
     try {
         if (searchTerm.trim() !== "") {
@@ -22,7 +26,7 @@ async function loadView() {
             //await searchFiles(path, searchTerm);
             //render search
         } else {
-            console.log("Begin loading folder")
+            console.log("Begin loading folder path " + path);
             const result = await browseFolder(path);
             renderFolder(result);
         }
@@ -99,10 +103,11 @@ async function uploadFile(file, path) {
     await loadView();
 }
 
-function setUploadButton(path) {
+function setUploadButton() {
     const uploadButton = document.getElementById("uploadButton");
     const inputFile = document.getElementById("uploadFile");
     inputFile.value = "";
+
     uploadButton.addEventListener("click", async () => {
         if (!inputFile.files.length) {
             console.log("no file input");
@@ -112,7 +117,7 @@ function setUploadButton(path) {
         try {
             console.log("uploading file");
             const file = inputFile.files[0];
-            await uploadFile(file, path ?? "");
+            await uploadFile(file, (new URLSearchParams(location.search)).get("path") || "");
         } catch (error) {
             //show error
         }
@@ -129,18 +134,24 @@ async function downloadFile(path) {
 
 
 //create folder
-function setCreateFolderButton(path) {
+function setCreateFolderButton() {
     const button = document.getElementById("createFolderButton");
+
     button.addEventListener("click", async () => {
         const folderName = prompt("Enter the new folder name:");
-        createFolder(path, folderName);
+        createFolder((new URLSearchParams(location.search)).get("path") || "", folderName);
     });
 }
 
 async function createFolder(path, name) {
     if (name === null) return;
-    const url = `api/files/createfolder?path=${encodeURIComponent(path)}&name=${encodeURIComponent(name)}`;
-    window.location.href = url;
+    //console.log("Creating folder at" + path + "named " + name);
+    const url = `api/files/createfolder?name=${encodeURIComponent(name)}&path=${encodeURIComponent(path)}`;
+    const response = await fetch(url, {method: "POST"});
+    if (!response.ok) {
+        //display error
+    }
+
     await loadView();
 }
 
