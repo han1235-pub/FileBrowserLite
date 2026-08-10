@@ -19,17 +19,15 @@ async function loadView() {
     const searchTerm = params.get("search") || "";
     clearField();
 
-    // setUploadButton(path);
-    // setCreateFolderButton(path);
-
     try {
         if (searchTerm.trim() !== "") {
             const result = await searchFolder(path, searchTerm);
+            document.getElementById("summary").style.visibility = "hidden";
             renderFolder(result);
         } else {
-            //console.log("Begin loading folder path " + path);
             const result = await browseFolder(path);
             renderFolder(result.items);
+            document.getElementById("summary").style.visibility = "visible";
             renderSummary(result);
         }
     } catch (error) {
@@ -53,7 +51,6 @@ async function browseFolder(path) {
 }
 
 function renderFolder(data) {
-    //console.log("called renderFolder()");
     const fileList = document.getElementById("fileList");
     fileList.innerHTML = "";
     data.forEach(item => {
@@ -73,14 +70,12 @@ function renderFolder(data) {
         
         if (item.type === "folder") {
             div.addEventListener("click", () => {
-                //console.log("CLICKED:", item.revPath);
                 openFolder(item.revPath);
             });
         }
 
         if (item.type === "file") {
             div.addEventListener("click", () => {
-                //console.log("CLICKED:", item.revPath);
                 downloadFile(item.revPath);
             });
         }
@@ -122,7 +117,6 @@ function setUploadButton() {
         }
 
         try {
-            //console.log("uploading file");
             const file = inputFile.files[0];
             await uploadFile(file, (new URLSearchParams(location.search)).get("path") || "");
         } catch (error) {
@@ -217,6 +211,7 @@ function renderSummary(data) {
     summary.textContent = `${data.summary.folderCount} folders | ` + `${data.summary.fileCount} files | ` + `${getSize(data.summary.totalFileSize)}`;
 }
 
+//display error
 function showError(message) {
     const box = document.getElementById("fileDisplay")
     box.innerHTML = "";

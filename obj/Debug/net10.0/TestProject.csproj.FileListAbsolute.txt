@@ -59,4 +59,4 @@
 /Users/hanguyen/Downloads/FileBrowser/obj/Debug/net10.0/ref/TestProject.dll
 /Users/hanguyen/Downloads/FileBrowser/obj/Debug/net10.0/compressed/ikwrhtzjx0-{0}-niob6cgemw-niob6cgemw.gz
 /Users/hanguyen/Downloads/FileBrowser/obj/Debug/net10.0/compressed/0zz5e69735-{0}-wgfcslxm3p-wgfcslxm3p.gz
-/Users/hanguyen/Downloads/FileBrowser/obj/Debug/net10.0/compressed/5ggry9c8cn-{0}-h1zo3athi2-h1zo3athi2.gz
+/Users/hanguyen/Downloads/FileBrowser/obj/Debug/net10.0/compressed/5ggry9c8cn-{0}-k3zj6bodgy-k3zj6bodgy.gz
