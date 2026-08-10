@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/hanguyen/Downloads/TestProject/TestProject.csproj",
+      "projectUniqueName": "/Users/hanguyen/Downloads/FileBrowser/TestProject.csproj",
       "projectName": "TestProject",
-      "projectPath": "/Users/hanguyen/Downloads/TestProject/TestProject.csproj",
+      "projectPath": "/Users/hanguyen/Downloads/FileBrowser/TestProject.csproj",
       "packagesPath": "/Users/hanguyen/.nuget/packages/",
-      "outputPath": "/Users/hanguyen/Downloads/TestProject/obj/",
+      "outputPath": "/Users/hanguyen/Downloads/FileBrowser/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/hanguyen/.nuget/NuGet/NuGet.Config"
