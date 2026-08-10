@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setUploadButton();
     setCreateFolderButton();
+    setSearchButton();
     loadView();
 
     window.addEventListener("popstate",loadView);
@@ -16,22 +17,23 @@ async function loadView() {
     const params = new URLSearchParams(location.search);
     const path = params.get("path") || "";
     const searchTerm = params.get("search") || "";
+    clearField();
 
     // setUploadButton(path);
     // setCreateFolderButton(path);
 
     try {
         if (searchTerm.trim() !== "") {
-            const result = "";
-            //await searchFiles(path, searchTerm);
-            //render search
-        } else {
-            console.log("Begin loading folder path " + path);
-            const result = await browseFolder(path);
+            const result = await searchFolder(path, searchTerm);
             renderFolder(result);
+        } else {
+            //console.log("Begin loading folder path " + path);
+            const result = await browseFolder(path);
+            renderFolder(result.items);
+            renderSummary(result);
         }
     } catch (error) {
-        //display error
+        showError(error.message);
     }
 }
 
@@ -51,27 +53,34 @@ async function browseFolder(path) {
 }
 
 function renderFolder(data) {
-    console.log("called renderFolder()");
-
+    //console.log("called renderFolder()");
     const fileList = document.getElementById("fileList");
     fileList.innerHTML = "";
-    data.items.forEach(item => {
+    data.forEach(item => {
         const div = document.createElement("div");
         div.className = "fileRow";
-        div.textContent = `${item.name}\t\t${item.type}`;
+
+        const icon = document.createElement("span");
+        icon.textContent = (item.type === "folder") ? "📁" : "📄";
+        const name = document.createElement("span");
+        name.textContent = item.name;
+        name.className = "file-name";
+        div.appendChild(icon);
+        div.appendChild(name);
+
 
         div.style.cursor = "pointer";
         
         if (item.type === "folder") {
             div.addEventListener("click", () => {
-                console.log("CLICKED:", item.revPath);
+                //console.log("CLICKED:", item.revPath);
                 openFolder(item.revPath);
             });
         }
 
         if (item.type === "file") {
             div.addEventListener("click", () => {
-                console.log("CLICKED:", item.revPath);
+                //console.log("CLICKED:", item.revPath);
                 downloadFile(item.revPath);
             });
         }
@@ -97,7 +106,7 @@ async function uploadFile(file, path) {
     });
 
     if(!response.ok) {
-        //error
+        throw new Error("Upload failed.")
     }
     
     await loadView();
@@ -106,20 +115,18 @@ async function uploadFile(file, path) {
 function setUploadButton() {
     const uploadButton = document.getElementById("uploadButton");
     const inputFile = document.getElementById("uploadFile");
-    inputFile.value = "";
 
     uploadButton.addEventListener("click", async () => {
         if (!inputFile.files.length) {
-            console.log("no file input");
             return;
         }
 
         try {
-            console.log("uploading file");
+            //console.log("uploading file");
             const file = inputFile.files[0];
             await uploadFile(file, (new URLSearchParams(location.search)).get("path") || "");
         } catch (error) {
-            //show error
+            showError(error.message);
         }
     });
 }
@@ -131,6 +138,35 @@ async function downloadFile(path) {
 }
 
 //search
+async function searchFolder(path, term) {
+    const url = `/api/files/search?path=${encodeURIComponent(path)}&searchTerm=${encodeURIComponent(term)}`;
+    const response = await fetch (url);
+
+    if(!response.ok) {
+        throw new Error("Search failed.")
+    }
+
+    return await response.json();
+}
+
+function setSearchButton() {
+    const searchButton = document.getElementById("searchButton");
+    searchButton.addEventListener("click", performSearch);
+}
+
+function performSearch() {
+    const searchBox = document.getElementById("searchBox");
+    const term = searchBox.value.trim();
+    const path = (new URLSearchParams(window.location.search)).get("path") || "";
+    var url = "";
+    if (term === "") {
+        url = path ? `?path=${encodeURIComponent(path)}` : `?`;
+    } else {
+        url = `?path=${encodeURIComponent(path)}&search=${encodeURIComponent(term)}`;
+    }
+    history.pushState({}, "", url);
+    loadView();
+}
 
 
 //create folder
@@ -149,9 +185,45 @@ async function createFolder(path, name) {
     const url = `api/files/createfolder?name=${encodeURIComponent(name)}&path=${encodeURIComponent(path)}`;
     const response = await fetch(url, {method: "POST"});
     if (!response.ok) {
-        //display error
+        throw new Error("Failed to create folder.");
     }
 
     await loadView();
 }
 
+//clear function
+function clearField() {
+    var inputFile = document.getElementById("uploadFile");
+    inputFile.value = "";
+    var inputSearch = document.getElementById("searchBox");
+    inputSearch = "";
+}
+
+//get the size
+function getSize(bytes) {
+    if (bytes === 0) {
+        return "0.00 B";
+    }
+    
+    let e = Math.floor(Math.log(bytes) / Math.log(1024));
+    return (bytes / Math.pow(1024, e)).toFixed(2) + ' ' + ' KMGTP'.charAt(e) + 'B';
+}
+
+//display summary
+function renderSummary(data) {
+    const summaryBox = document.getElementById("summary");
+    summary.innerHTML = "";
+
+    summary.textContent = `${data.summary.folderCount} folders | ` + `${data.summary.fileCount} files | ` + `${getSize(data.summary.totalFileSize)}`;
+}
+
+function showError(message) {
+    const box = document.getElementById("fileDisplay")
+    box.innerHTML = "";
+
+    const error = document.createElement("div");
+    error.className = "error";
+    error.textContent = `Error: ${message}`;
+
+    box.appendChild(error);
+}

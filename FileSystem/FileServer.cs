@@ -118,7 +118,7 @@ using System.Runtime.CompilerServices;
                 {
                     Name = Path.GetFileName(x),
                     RevPath = Path.GetRelativePath(_rootDirectory, x),
-                    Type = isDir ? "Folder" : "File",
+                    Type = isDir ? "folder" : "file",
                     Size = isDir ? null : new FileInfo(x).Length
                 };
             }).ToList();

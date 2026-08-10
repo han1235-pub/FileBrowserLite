@@ -1,0 +1,24 @@
+html *
+{
+   font-family: Arial;
+}
+
+body {
+    background-color: #ace4fc;
+}
+
+#fileDisplay{
+    background-color: aliceblue;
+    border-radius: 25px;
+    margin-top: 10px;
+    margin-right: 5px;
+    height: 100%;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+}
+
+.fileRow{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

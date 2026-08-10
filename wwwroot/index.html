@@ -8,17 +8,17 @@
 
     <h2>File Browser</h2>
 
-    <input id="searchBox" placeholder="Search..." />
-
-    <div id="summary"></div>
-
-    <div id="breadcrumbs"></div>
+    <input id="searchBox" placeholder="Search..." /> <button id="searchButton">Search</button>
 
     <input type="file" id="uploadFile">
     <button id="uploadButton">Upload</button>
     <button id="createFolderButton">New Folder</button>
 
-    <div id="fileList"></div>
+    <div id="fileDisplay">
+        <div id="fileList"></div>
+        
+        <div id="summary"></div>
+    </div>
 
     <script type="module" src="./app.js"></script>
 
